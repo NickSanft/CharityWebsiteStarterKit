@@ -31,3 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embeddable DonationWidget component for homepage/sidebar
 - DonationTicker component showing recent anonymized donations
 - Public events listing page with upcoming/past events
+- Event detail pages with full description, date/time, location (Google Maps links), capacity tracking
+- Event registration system with capacity validation and confirmation emails
+- "Add to Calendar" .ics file download for individual events
+- iCal feed URL for subscribing to all events (/api/events/feed)
+- Admin event management: create, edit, publish/draft toggle
+- Admin event registrations view with CSV export
+- Event form with Markdown editor and preview

@@ -3,6 +3,7 @@ import { formatDateTime } from '@/lib/utils';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users } from 'lucide-react';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -46,35 +47,37 @@ export default async function EventsPage() {
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
             {upcomingEvents.map((event) => (
-              <Card key={event.id} className="overflow-hidden">
-                <CardHeader>
-                  <h3 className="text-xl font-semibold">{event.title}</h3>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDateTime(event.startDate)}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
-                  </div>
-                  {event.capacity && (
+              <Link href={`/events/${event.slug}`} key={event.id} className="group">
+                <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+                  <CardHeader>
+                    <h3 className="text-xl font-semibold group-hover:text-primary">{event.title}</h3>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>
-                        {event._count.registrations} / {event.capacity} registered
-                      </span>
-                      {event._count.registrations >= event.capacity && (
-                        <Badge variant="destructive" className="ml-1">Full</Badge>
-                      )}
+                      <Calendar className="h-4 w-4" />
+                      <span>{formatDateTime(event.startDate)}</span>
                     </div>
-                  )}
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {event.description}
-                  </p>
-                </CardContent>
-              </Card>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="h-4 w-4" />
+                      <span>{event.location}</span>
+                    </div>
+                    {event.capacity && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Users className="h-4 w-4" />
+                        <span>
+                          {event._count.registrations} / {event.capacity} registered
+                        </span>
+                        {event._count.registrations >= event.capacity && (
+                          <Badge variant="destructive" className="ml-1">Full</Badge>
+                        )}
+                      </div>
+                    )}
+                    <p className="text-sm text-muted-foreground line-clamp-3">
+                      {event.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
@@ -86,21 +89,23 @@ export default async function EventsPage() {
           <h2 className="mb-6 text-2xl font-semibold">Past Events</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {pastEvents.map((event) => (
-              <Card key={event.id} className="opacity-75">
-                <CardHeader>
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDateTime(event.startDate)}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
-                  </div>
-                </CardContent>
-              </Card>
+              <Link href={`/events/${event.slug}`} key={event.id} className="group">
+                <Card className="opacity-75 transition-shadow hover:shadow-lg">
+                  <CardHeader>
+                    <h3 className="text-lg font-semibold group-hover:text-primary">{event.title}</h3>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4" />
+                      <span>{formatDateTime(event.startDate)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="h-4 w-4" />
+                      <span>{event.location}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
