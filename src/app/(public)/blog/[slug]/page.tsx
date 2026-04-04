@@ -57,7 +57,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  const tags = (post.tags as string[]) || [];
+  const rawTags = post.tags;
+  const tags: string[] = Array.isArray(rawTags)
+    ? rawTags
+    : typeof rawTags === 'string'
+      ? JSON.parse(rawTags)
+      : [];
 
   return (
     <article className="container mx-auto max-w-3xl px-4 py-12">

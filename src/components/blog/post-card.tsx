@@ -10,7 +10,12 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
-  const tags = (post.tags as string[]) || [];
+  const rawTags = post.tags;
+  const tags: string[] = Array.isArray(rawTags)
+    ? rawTags
+    : typeof rawTags === 'string'
+      ? JSON.parse(rawTags)
+      : [];
 
   return (
     <Link href={`/blog/${post.slug}`} className="group">
