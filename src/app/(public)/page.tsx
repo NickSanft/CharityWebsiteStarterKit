@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/lib/prisma';
 import { formatDate, truncate } from '@/lib/utils';
+import { DonationWidget } from '@/components/donations/donation-widget';
+import { DonationTicker } from '@/components/donations/donation-ticker';
 
 export const dynamic = 'force-dynamic';
 
@@ -216,6 +218,16 @@ export default async function HomePage() {
               </Button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Donation Section */}
+      <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+            <DonationWidget />
+            <DonationTicker />
+          </div>
         </div>
       </section>
 

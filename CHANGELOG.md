@@ -23,3 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database schema with Prisma ORM
 - Seed script with demo data
 - MIT License
+- Stripe integration for one-time and recurring donations via Stripe Elements
+- Payment processing API (create-intent, webhook handler)
+- Donation page with multi-step form (amount selection, donor info, Stripe payment)
+- Admin donation management with summary stats (total, monthly, yearly, recurring donors)
+- CSV export for donation data
+- Embeddable DonationWidget component for homepage/sidebar
+- DonationTicker component showing recent anonymized donations
+- Public events listing page with upcoming/past events

@@ -10,15 +10,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DollarSign, TrendingUp, RefreshCw, AlertCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, RefreshCw, Calendar } from 'lucide-react';
+import { DonationFilters } from './donation-filters';
 
 export const dynamic = 'force-dynamic';
 
 async function getDonationStats() {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-  const [totalAgg, monthAgg, recurringCount, donations] = await Promise.all([
+  const [totalAgg, monthAgg, yearAgg, recurringCount, donations] = await Promise.all([
     prisma.donation.aggregate({
       where: { status: 'COMPLETED' },
       _sum: { amount: true },
@@ -27,6 +29,13 @@ async function getDonationStats() {
       where: {
         status: 'COMPLETED',
         createdAt: { gte: startOfMonth },
+      },
+      _sum: { amount: true },
+    }),
+    prisma.donation.aggregate({
+      where: {
+        status: 'COMPLETED',
+        createdAt: { gte: startOfYear },
       },
       _sum: { amount: true },
     }),
@@ -41,6 +50,7 @@ async function getDonationStats() {
   return {
     totalRaised: totalAgg._sum.amount ?? 0,
     thisMonth: monthAgg._sum.amount ?? 0,
+    thisYear: yearAgg._sum.amount ?? 0,
     recurringDonors: recurringCount,
     donations,
   };
@@ -54,7 +64,7 @@ const statusColors: Record<string, 'default' | 'secondary' | 'outline' | 'destru
 };
 
 export default async function DonationsPage() {
-  const { totalRaised, thisMonth, recurringDonors, donations } =
+  const { totalRaised, thisMonth, thisYear, recurringDonors, donations } =
     await getDonationStats();
 
   const summaryCards = [
@@ -73,6 +83,13 @@ export default async function DonationsPage() {
       bg: 'bg-blue-50',
     },
     {
+      label: 'This Year',
+      value: formatCurrency(thisYear),
+      icon: Calendar,
+      color: 'text-amber-600',
+      bg: 'bg-amber-50',
+    },
+    {
       label: 'Recurring Donors',
       value: recurringDonors.toString(),
       icon: RefreshCw,
@@ -83,22 +100,16 @@ export default async function DonationsPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Donations</h1>
-        <p className="text-muted-foreground">
-          Track and manage donation activity.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Donations</h1>
+          <p className="text-muted-foreground">
+            Track and manage donation activity.
+          </p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
-        <AlertCircle className="h-5 w-5 flex-shrink-0" />
-        <p className="text-sm">
-          Stripe integration is coming in Phase 2. Currently displaying existing
-          donation records.
-        </p>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {summaryCards.map((card) => (
           <Card key={card.label}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -118,7 +129,10 @@ export default async function DonationsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>All Donations</CardTitle>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <CardTitle>All Donations</CardTitle>
+            <DonationFilters />
+          </div>
         </CardHeader>
         <CardContent>
           {donations.length === 0 ? (
@@ -126,44 +140,50 @@ export default async function DonationsPage() {
               No donations recorded yet.
             </p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Donor</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {donations.map((donation) => (
-                  <TableRow key={donation.id}>
-                    <TableCell className="font-medium">
-                      {donation.donorName ?? 'Anonymous'}
-                    </TableCell>
-                    <TableCell>{donation.donorEmail}</TableCell>
-                    <TableCell>
-                      {formatCurrency(donation.amount, donation.currency)}
-                    </TableCell>
-                    <TableCell>
-                      {donation.recurring ? (
-                        <Badge variant="outline">Recurring</Badge>
-                      ) : (
-                        <Badge variant="secondary">One-time</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={statusColors[donation.status] ?? 'default'}>
-                        {donation.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{formatDate(donation.createdAt)}</TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Donor</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Message</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {donations.map((donation) => (
+                    <TableRow key={donation.id}>
+                      <TableCell className="font-medium">
+                        {donation.donorName ?? 'Anonymous'}
+                      </TableCell>
+                      <TableCell>{donation.donorEmail}</TableCell>
+                      <TableCell>
+                        {formatCurrency(donation.amount, donation.currency)}
+                      </TableCell>
+                      <TableCell>
+                        {donation.recurring ? (
+                          <Badge variant="outline">Recurring</Badge>
+                        ) : (
+                          <Badge variant="secondary">One-time</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={statusColors[donation.status] ?? 'default'}>
+                          {donation.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{formatDate(donation.createdAt)}</TableCell>
+                      <TableCell className="max-w-[200px] truncate text-sm text-muted-foreground">
+                        {donation.message || '—'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
