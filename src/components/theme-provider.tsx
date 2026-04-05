@@ -7,26 +7,28 @@ function hexToRgb(hex: string): string {
 }
 
 export async function ThemeStyle() {
-  let settings = null;
+  let css = '';
+
   try {
-    settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+    const settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+    if (settings) {
+      const overrides: string[] = [];
+      if (settings.primaryColor) {
+        const rgb = hexToRgb(settings.primaryColor);
+        if (rgb) overrides.push(`--primary: ${rgb}; --ring: ${rgb};`);
+      }
+      if (settings.secondaryColor) {
+        const rgb = hexToRgb(settings.secondaryColor);
+        if (rgb) overrides.push(`--secondary: ${rgb};`);
+      }
+      if (overrides.length > 0) {
+        css = `:root { ${overrides.join(' ')} }`;
+      }
+    }
   } catch {
     // Database may not be ready yet
   }
 
-  if (!settings) return null;
-
-  const overrides: string[] = [];
-  if (settings.primaryColor) {
-    const rgb = hexToRgb(settings.primaryColor);
-    if (rgb) overrides.push(`--primary: ${rgb}; --ring: ${rgb};`);
-  }
-  if (settings.secondaryColor) {
-    const rgb = hexToRgb(settings.secondaryColor);
-    if (rgb) overrides.push(`--secondary: ${rgb};`);
-  }
-
-  if (overrides.length === 0) return null;
-
-  return <style dangerouslySetInnerHTML={{ __html: `:root { ${overrides.join(' ')} }` }} />;
+  // Always render the style tag to avoid hydration mismatch
+  return <style dangerouslySetInnerHTML={{ __html: css }} />;
 }
