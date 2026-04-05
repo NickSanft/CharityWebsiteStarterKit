@@ -51,6 +51,18 @@ Thank you for your interest in contributing! This guide will help you get starte
 - [ ] No new TypeScript errors
 - [ ] Accessibility considerations addressed
 
+## Accessibility Testing
+
+All contributions must maintain WCAG 2.1 Level AA compliance:
+
+- Use semantic HTML elements (`<nav>`, `<main>`, `<article>`, `<section>`, etc.)
+- All interactive elements must be keyboard accessible
+- All images must have meaningful `alt` text
+- Form inputs must have associated `<label>` elements
+- Color contrast must meet minimum ratios (4.5:1 for text, 3:1 for large text)
+- Test with keyboard navigation (Tab, Enter, Escape)
+- Screen reader testing is encouraged (VoiceOver on Mac, NVDA on Windows)
+
 ## Reporting Bugs
 
 Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) to file bugs.

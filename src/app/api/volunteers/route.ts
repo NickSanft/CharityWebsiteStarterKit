@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
+import { volunteerWelcomeEmail } from '@/lib/email-templates';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -39,14 +40,7 @@ export async function POST(request: Request) {
     sendEmail({
       to: email.trim().toLowerCase(),
       subject: 'Welcome — Volunteer Registration Confirmed',
-      html: `
-        <h2>Welcome aboard!</h2>
-        <p>Hi ${name.trim()},</p>
-        <p>Thank you for signing up as a volunteer! We've received your application and a member of our team will be in touch soon.</p>
-        ${Array.isArray(interests) && interests.length > 0 ? `<p><strong>Your interests:</strong> ${interests.join(', ')}</p>` : ''}
-        ${availability ? `<p><strong>Availability:</strong> ${availability.trim()}</p>` : ''}
-        <p>We're excited to have you on the team!</p>
-      `,
+      html: volunteerWelcomeEmail(name.trim(), Array.isArray(interests) ? interests : []),
     }).catch(console.error);
 
     return NextResponse.json({ success: true });

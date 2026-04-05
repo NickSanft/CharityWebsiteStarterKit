@@ -44,3 +44,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSV export for volunteer data
 - Configurable volunteer interest categories in admin settings
 - Public volunteer form dynamically loads interest categories from settings
+- Auto-generated sitemap.xml with dynamic blog and event URLs
+- robots.txt blocking admin and API routes from crawlers
+- Open Graph and Twitter Card meta tags on all public pages
+- JSON-LD structured data for blog posts (BlogPosting) and events (Event)
+- Skip-to-content link for keyboard/screen reader users
+- ARIA landmarks and labels on navigation, header, and main content
+- Email templates for contact confirmation, volunteer welcome, event registration, and donation receipt
+- JSDoc documentation on all utility functions
+- Deployment guide (Docker Compose and manual)
+- Architecture Decision Records (ADRs) for key technology choices
+- 10 pre-written good-first-issue templates for new contributors
+- Accessibility testing section in CONTRIBUTING.md

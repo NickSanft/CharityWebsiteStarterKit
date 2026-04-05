@@ -57,6 +57,28 @@ export default async function EventDetailPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Event',
+            name: event.title,
+            description: event.description.slice(0, 200),
+            startDate: event.startDate.toISOString(),
+            endDate: event.endDate.toISOString(),
+            location: event.location.toLowerCase() === 'virtual'
+              ? { '@type': 'VirtualLocation', url: event.virtualLink || '' }
+              : { '@type': 'Place', name: event.location, address: event.location },
+            ...(event.capacity ? { maximumAttendeeCapacity: event.capacity } : {}),
+            image: event.coverImage || undefined,
+            eventStatus: 'https://schema.org/EventScheduled',
+            eventAttendanceMode: event.virtualLink
+              ? 'https://schema.org/MixedEventAttendanceMode'
+              : 'https://schema.org/OfflineEventAttendanceMode',
+          }),
+        }}
+      />
       <Link href="/events">
         <Button variant="ghost" size="sm" className="mb-6 gap-2">
           <ArrowLeft className="h-4 w-4" />

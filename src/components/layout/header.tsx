@@ -28,7 +28,7 @@ export function Header({ orgName = 'OpenGood', logoUrl }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-6">
           {publicNavItems.map((item) => (
             <Link
               key={item.href}
@@ -51,6 +51,7 @@ export function Header({ orgName = 'OpenGood', logoUrl }: HeaderProps) {
           className="md:hidden p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -59,7 +60,7 @@ export function Header({ orgName = 'OpenGood', logoUrl }: HeaderProps) {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t">
-          <nav className="container mx-auto flex flex-col gap-2 px-4 py-4">
+          <nav role="navigation" aria-label="Mobile navigation" className="container mx-auto flex flex-col gap-2 px-4 py-4">
             {publicNavItems.map((item) => (
               <Link
                 key={item.href}

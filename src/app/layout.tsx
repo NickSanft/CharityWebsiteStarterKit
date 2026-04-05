@@ -20,6 +20,19 @@ export const metadata: Metadata = {
     template: '%s | OpenGood',
   },
   description: 'A self-hosted website starter kit for charities and nonprofits.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'OpenGood',
+    title: 'OpenGood — Nonprofit Website Starter Kit',
+    description: 'A self-hosted website starter kit for charities and nonprofits.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'OpenGood — Nonprofit Website Starter Kit',
+    description: 'A self-hosted website starter kit for charities and nonprofits.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,6 +42,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeStyle />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+        >
+          Skip to content
+        </a>
         {children}
         <Toaster />
       </body>

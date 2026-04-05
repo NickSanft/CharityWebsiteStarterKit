@@ -9,6 +9,11 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Blog',
+  description: 'Stories, updates, and insights from our organization.',
+  openGraph: {
+    title: 'Blog',
+    description: 'Stories, updates, and insights from our organization.',
+  },
 };
 
 const PAGE_SIZE = 9;

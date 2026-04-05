@@ -11,6 +11,10 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Upcoming events and activities.',
+  openGraph: {
+    title: 'Events',
+    description: 'Upcoming events and activities.',
+  },
 };
 
 export default async function EventsPage() {

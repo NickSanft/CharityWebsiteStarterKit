@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
 import { formatDateTime } from '@/lib/utils';
+import { eventRegistrationEmail } from '@/lib/email-templates';
 
 export async function POST(
   request: Request,
@@ -54,18 +55,14 @@ export async function POST(
   sendEmail({
     to: email,
     subject: `Registration Confirmed: ${event.title}`,
-    html: `
-      <h2>You're registered!</h2>
-      <p>Hi ${name},</p>
-      <p>Your registration for <strong>${event.title}</strong> has been confirmed.</p>
-      <ul>
-        <li><strong>Date:</strong> ${formatDateTime(event.startDate)} — ${formatDateTime(event.endDate)}</li>
-        <li><strong>Location:</strong> ${event.location}</li>
-        ${event.virtualLink ? `<li><strong>Virtual Link:</strong> <a href="${event.virtualLink}">${event.virtualLink}</a></li>` : ''}
-        <li><strong>Guests:</strong> ${headcount}</li>
-      </ul>
-      <p>We look forward to seeing you there!</p>
-    `,
+    html: eventRegistrationEmail(
+      name,
+      event.title,
+      `${formatDateTime(event.startDate)} — ${formatDateTime(event.endDate)}`,
+      event.location,
+      headcount,
+      event.virtualLink,
+    ),
   }).catch(console.error);
 
   return NextResponse.json(registration, { status: 201 });

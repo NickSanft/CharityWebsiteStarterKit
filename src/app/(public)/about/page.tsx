@@ -4,6 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const metadata: Metadata = {
   title: 'About',
+  description: 'Learn about our story, our mission, and the values that guide everything we do.',
+  openGraph: {
+    title: 'About',
+    description: 'Learn about our story, our mission, and the values that guide everything we do.',
+  },
 };
 
 const values = [

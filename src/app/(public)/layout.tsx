@@ -18,7 +18,7 @@ export default async function PublicLayout({ children }: { children: React.React
         orgName={settings?.orgName}
         logoUrl={settings?.logoUrl}
       />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <Footer
         orgName={settings?.orgName}
         contactEmail={settings?.contactEmail}

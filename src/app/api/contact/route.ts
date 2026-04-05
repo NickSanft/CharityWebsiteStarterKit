@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendEmail } from '@/lib/email';
+import { contactConfirmationEmail } from '@/lib/email-templates';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,6 +40,12 @@ export async function POST(request: Request) {
         message: message.trim(),
       },
     });
+
+    sendEmail({
+      to: email,
+      subject: 'We received your message',
+      html: contactConfirmationEmail(name),
+    }).catch(console.error);
 
     return NextResponse.json({ success: true });
   } catch {

@@ -144,14 +144,17 @@ docker-compose exec app npx prisma migrate deploy
 ## Roadmap
 
 - [x] **Phase 1:** Foundation — project setup, auth, blog, admin dashboard, theming
-- [ ] **Phase 2:** Donations — Stripe integration for one-time and recurring donations
-- [ ] **Phase 3:** Events — event creation, public registration, calendar integration
-- [ ] **Phase 4:** Volunteers — enhanced volunteer management and communication
-- [ ] **Phase 5:** Polish — accessibility audit, SEO, performance, email templates
+- [x] **Phase 2:** Donations — Stripe integration for one-time and recurring donations
+- [x] **Phase 3:** Events — event creation, public registration, calendar integration
+- [x] **Phase 4:** Volunteers — enhanced volunteer management and communication
+- [x] **Phase 5:** Polish — accessibility audit, SEO, performance, email templates
 
-## Contributing
+## Contributors
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+<!-- ALL-CONTRIBUTORS-LIST:START -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 

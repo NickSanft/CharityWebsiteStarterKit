@@ -2,6 +2,11 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Contact',
+  description: 'Get in touch with us. We would love to hear from you.',
+  openGraph: {
+    title: 'Contact',
+    description: 'Get in touch with us. We would love to hear from you.',
+  },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

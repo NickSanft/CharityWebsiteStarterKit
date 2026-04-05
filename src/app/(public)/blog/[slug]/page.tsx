@@ -66,6 +66,24 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <article className="container mx-auto max-w-3xl px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.excerpt || '',
+            image: post.coverImage || undefined,
+            datePublished: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+            dateModified: post.updatedAt.toISOString(),
+            author: {
+              '@type': 'Person',
+              name: post.author.name,
+            },
+          }),
+        }}
+      />
       <Link href="/blog">
         <Button variant="ghost" size="sm" className="mb-6 gap-2">
           <ArrowLeft className="h-4 w-4" />
