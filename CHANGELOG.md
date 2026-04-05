@@ -38,3 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Admin event management: create, edit, publish/draft toggle
 - Admin event registrations view with CSV export
 - Event form with Markdown editor and preview
+- Volunteer confirmation email sent on sign-up
+- Admin volunteer detail page with full contact info, interests, message, and status
+- Volunteer email outreach from admin (send custom emails to individual volunteers)
+- CSV export for volunteer data
+- Configurable volunteer interest categories in admin settings
+- Public volunteer form dynamically loads interest categories from settings

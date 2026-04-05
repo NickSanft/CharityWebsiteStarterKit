@@ -47,6 +47,9 @@ export async function PUT(request: Request) {
         contactPhone: body.contactPhone ?? null,
         address: body.address ?? null,
         socialLinks: body.socialLinks ?? {},
+        ...(body.volunteerInterests !== undefined && {
+          volunteerInterests: body.volunteerInterests,
+        }),
       },
       create: {
         id: 'default',
@@ -59,6 +62,9 @@ export async function PUT(request: Request) {
         contactPhone: body.contactPhone ?? null,
         address: body.address ?? null,
         socialLinks: body.socialLinks ?? {},
+        ...(body.volunteerInterests !== undefined && {
+          volunteerInterests: body.volunteerInterests,
+        }),
       },
     });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HandHelping, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,15 +9,22 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 
-const interestOptions = [
-  'Fundraising',
-  'Mentoring',
-  'Event Support',
-  'Administrative',
-  'Technical',
-];
-
 export default function VolunteerPage() {
+  const [interestOptions, setInterestOptions] = useState<string[]>([
+    'Fundraising', 'Mentoring', 'Event Support', 'Administrative', 'Technical',
+  ]);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.volunteerInterests) && data.volunteerInterests.length > 0) {
+          setInterestOptions(data.volunteerInterests);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

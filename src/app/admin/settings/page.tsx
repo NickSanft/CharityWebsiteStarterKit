@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Save } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Save, X, Plus } from 'lucide-react';
 
 interface SocialLinks {
   facebook?: string;
@@ -27,6 +28,7 @@ interface SettingsFormData {
   contactPhone: string;
   address: string;
   socialLinks: SocialLinks;
+  volunteerInterests: string[];
 }
 
 export default function SettingsPage() {
@@ -43,7 +45,9 @@ export default function SettingsPage() {
     contactPhone: '',
     address: '',
     socialLinks: {},
+    volunteerInterests: ['Fundraising', 'Mentoring', 'Event Support', 'Administrative', 'Technical'],
   });
+  const [newInterest, setNewInterest] = useState('');
 
   useEffect(() => {
     async function loadSettings() {
@@ -61,6 +65,9 @@ export default function SettingsPage() {
             contactPhone: data.contactPhone ?? '',
             address: data.address ?? '',
             socialLinks: (data.socialLinks as SocialLinks) ?? {},
+            volunteerInterests: Array.isArray(data.volunteerInterests)
+              ? data.volunteerInterests
+              : ['Fundraising', 'Mentoring', 'Event Support', 'Administrative', 'Technical'],
           });
         }
       } catch {
@@ -312,6 +319,76 @@ export default function SettingsPage() {
                   placeholder="https://linkedin.com/company/yourorg"
                 />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Volunteer Interest Categories</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              {form.volunteerInterests.map((interest) => (
+                <Badge
+                  key={interest}
+                  variant="secondary"
+                  className="flex items-center gap-1 px-3 py-1 text-sm"
+                >
+                  {interest}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        volunteerInterests: prev.volunteerInterests.filter(
+                          (i) => i !== interest,
+                        ),
+                      }))
+                    }
+                    className="ml-1 rounded-full hover:bg-muted"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="Add a new interest category"
+                value={newInterest}
+                onChange={(e) => setNewInterest(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const trimmed = newInterest.trim();
+                    if (trimmed && !form.volunteerInterests.includes(trimmed)) {
+                      setForm((prev) => ({
+                        ...prev,
+                        volunteerInterests: [...prev.volunteerInterests, trimmed],
+                      }));
+                      setNewInterest('');
+                    }
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const trimmed = newInterest.trim();
+                  if (trimmed && !form.volunteerInterests.includes(trimmed)) {
+                    setForm((prev) => ({
+                      ...prev,
+                      volunteerInterests: [...prev.volunteerInterests, trimmed],
+                    }));
+                    setNewInterest('');
+                  }
+                }}
+              >
+                <Plus className="mr-1 h-4 w-4" />
+                Add
+              </Button>
             </div>
           </CardContent>
         </Card>

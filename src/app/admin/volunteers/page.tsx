@@ -10,9 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Users } from 'lucide-react';
+import { Users, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { VolunteerStatusSelect } from './volunteer-status-select';
 import { VolunteerTabs } from './volunteer-tabs';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,11 +51,19 @@ export default async function VolunteersPage() {
             Manage your volunteer registrations.
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-md bg-muted p-2">
-          <Users className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">
-            {volunteers.length} total
-          </span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 rounded-md bg-muted p-2">
+            <Users className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">
+              {volunteers.length} total
+            </span>
+          </div>
+          <Button asChild variant="outline" size="sm">
+            <a href="/api/volunteers/export" download>
+              <Download className="mr-2 h-4 w-4" />
+              Export CSV
+            </a>
+          </Button>
         </div>
       </div>
 
@@ -96,7 +106,9 @@ export default async function VolunteersPage() {
                           {filtered.map((volunteer) => (
                             <TableRow key={volunteer.id}>
                               <TableCell className="font-medium">
-                                {volunteer.name}
+                                <Link href={`/admin/volunteers/${volunteer.id}`} className="text-primary hover:underline">
+                                  {volunteer.name}
+                                </Link>
                               </TableCell>
                               <TableCell>{volunteer.email}</TableCell>
                               <TableCell>

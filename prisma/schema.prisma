@@ -37,6 +37,7 @@ model SiteSettings {
   contactPhone   String?
   address        String?
   socialLinks    Json     @default("{}")
+  volunteerInterests Json @default("[\"Fundraising\",\"Mentoring\",\"Event Support\",\"Administrative\",\"Technical\"]")
   updatedAt      DateTime @updatedAt
 }
 
