@@ -25,6 +25,15 @@ async function main() {
         instagram: 'https://instagram.com/greenfield',
         linkedin: 'https://linkedin.com/company/greenfield',
       },
+      volunteerInterests: [
+        'Fundraising',
+        'Mentoring',
+        'Event Support',
+        'Administrative',
+        'Technical',
+        'Community Outreach',
+        'Youth Programs',
+      ],
     },
   });
 

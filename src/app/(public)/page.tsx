@@ -61,7 +61,7 @@ export default async function HomePage() {
             <Button
               size="lg"
               variant="outline"
-              className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="border-white bg-white/15 text-white hover:bg-white/25 hover:text-white"
               asChild
             >
               <Link href="/volunteer">

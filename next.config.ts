@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  allowedDevOrigins: ['192.168.*.*', '10.*.*.*', '172.16.*.*'],
   images: {
     remotePatterns: [
       {
@@ -9,6 +10,14 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/api/uploads/:path*',
+      },
+    ];
   },
 };
 
