@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+const ROOT = import.meta.dirname;
+
 /**
  * Static-export build of just the /builder route, intended for GitHub Pages.
  *
@@ -8,6 +10,10 @@ import type { NextConfig } from 'next';
  * Leave empty for custom-domain or user-pages deployments.
  */
 const config: NextConfig = {
+  // Prevent Turbopack from climbing to the parent repo (whose src/middleware.ts
+  // imports Prisma) when multiple lockfiles are detected.
+  turbopack: { root: ROOT },
+  outputFileTracingRoot: ROOT,
   output: 'export',
   trailingSlash: true,
   basePath: process.env.BUILDER_BASE_PATH ?? '',

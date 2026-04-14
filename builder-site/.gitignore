@@ -3,3 +3,6 @@ node_modules/
 out/
 next-env.d.ts
 public/builder-template.json
+
+# Synced from ../src/ at build time; see scripts/sync-builder-site.mjs
+src/
