@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Synced sources live at builder-site/src/; rely on Tailwind v4's default scan. */
+/* Synced sources live at builder-site/src/ — Tailwind v4 only auto-scans
+ * ./app by default, so point it at the synced tree as well. */
+@source "../src/**/*.{ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
