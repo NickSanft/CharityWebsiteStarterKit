@@ -43,10 +43,14 @@ export default function BuilderPage() {
   }
 
   async function onDownload() {
+    if (!manifest) return;
     setDownloading(true);
     try {
-      // Zip generation is wired in the next step.
-      alert('Zip download will land in the next step.');
+      const { buildAndDownloadZip } = await import('@/lib/builder/zip');
+      await buildAndDownloadZip(manifest, state);
+    } catch (err) {
+      console.error(err);
+      alert(`Could not build zip: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setDownloading(false);
     }

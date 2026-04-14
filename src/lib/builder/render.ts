@@ -126,15 +126,27 @@ export function renderPreview(
   const cssFile = manifest.files.find((f) => f.path === 'styles.css');
   const css = cssFile && cssFile.encoding === 'utf8' ? applyTemplate(cssFile.content, ctx) : '';
 
-  const logoSrc = ctx.state.logo_data_url || transparentPixel();
+  const logoFile = manifest.files.find((f) => f.path === 'assets/logo.svg');
+  const defaultLogoDataUrl =
+    logoFile && logoFile.encoding === 'utf8'
+      ? svgToDataUrl(applyTemplate(logoFile.content, ctx))
+      : transparentPixel();
+  const logoSrc = ctx.state.logo_data_url || defaultLogoDataUrl;
 
-  // Replace external stylesheet link with inline <style>, and swap logo src.
+  // Replace external stylesheet link with inline <style>, and swap asset refs.
   return pageHtml
     .replace(/<link rel="stylesheet" href="styles\.css" \/>/, `<style>${css}</style>`)
-    .replace(/src="assets\/logo\.png"/g, `src="${logoSrc}"`)
-    .replace(/href="assets\/favicon\.png"/g, 'href="#"')
+    .replace(/src="assets\/logo\.svg"/g, `src="${logoSrc}"`)
+    .replace(/href="assets\/favicon\.svg"/g, 'href="#"')
     // Rewrite cross-page links so nav clicks don't navigate away inside the iframe.
     .replace(/href="(index|about|events|volunteer|donate|contact)\.html"/g, 'href="#$1"');
+}
+
+function svgToDataUrl(svg: string): string {
+  if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
+    return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svg)))}`;
+  }
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
 function transparentPixel() {
