@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — {{charity_name}}</title>
+  <meta name="description" content="Upcoming events at {{charity_name}}" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="{{charity_name}} logo" />
+        <span>{{charity_name}}</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <!--IF:page_about--><a href="about.html">About</a><!--ENDIF-->
+        <a href="events.html" class="active">Events</a>
+        <!--IF:page_volunteer--><a href="volunteer.html">Volunteer</a><!--ENDIF-->
+        <!--IF:page_donate--><a href="donate.html">Donate</a><!--ENDIF-->
+        <!--IF:page_contact--><a href="contact.html">Contact</a><!--ENDIF-->
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page">
+      <div class="container">
+        <h1>{{events_heading}}</h1>
+        <p class="lead">{{events_lead}}</p>
+        <div class="cards">
+          <article class="card">
+            <h3>{{event1_title}}</h3>
+            <p><strong>{{event1_date}}</strong><br />{{event1_description}}</p>
+          </article>
+          <article class="card">
+            <h3>{{event2_title}}</h3>
+            <p><strong>{{event2_date}}</strong><br />{{event2_description}}</p>
+          </article>
+          <article class="card">
+            <h3>{{event3_title}}</h3>
+            <p><strong>{{event3_date}}</strong><br />{{event3_description}}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>&copy; {{year}} {{charity_name}}. All rights reserved.</div>
+      <div class="socials">
+        <!--IF:social_twitter--><a href="{{social_twitter}}" rel="noopener">Twitter</a><!--ENDIF-->
+        <!--IF:social_facebook--><a href="{{social_facebook}}" rel="noopener">Facebook</a><!--ENDIF-->
+        <!--IF:social_instagram--><a href="{{social_instagram}}" rel="noopener">Instagram</a><!--ENDIF-->
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

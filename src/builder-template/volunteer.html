@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteer — {{charity_name}}</title>
+  <meta name="description" content="Volunteer with {{charity_name}}" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="{{charity_name}} logo" />
+        <span>{{charity_name}}</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <!--IF:page_about--><a href="about.html">About</a><!--ENDIF-->
+        <!--IF:page_events--><a href="events.html">Events</a><!--ENDIF-->
+        <a href="volunteer.html" class="active">Volunteer</a>
+        <!--IF:page_donate--><a href="donate.html">Donate</a><!--ENDIF-->
+        <!--IF:page_contact--><a href="contact.html">Contact</a><!--ENDIF-->
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page">
+      <div class="container">
+        <h1>{{volunteer_heading}}</h1>
+        <p class="lead">{{volunteer_lead}}</p>
+        <div class="content">
+          <p>{{volunteer_body}}</p>
+        </div>
+        <a class="btn btn-primary" href="mailto:{{contact_email}}?subject=Volunteer%20interest">Get in touch</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>&copy; {{year}} {{charity_name}}. All rights reserved.</div>
+      <div class="socials">
+        <!--IF:social_twitter--><a href="{{social_twitter}}" rel="noopener">Twitter</a><!--ENDIF-->
+        <!--IF:social_facebook--><a href="{{social_facebook}}" rel="noopener">Facebook</a><!--ENDIF-->
+        <!--IF:social_instagram--><a href="{{social_instagram}}" rel="noopener">Instagram</a><!--ENDIF-->
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

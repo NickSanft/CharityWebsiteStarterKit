@@ -1,0 +1,184 @@
+:root {
+  --color-primary: {{color_primary}};
+  --color-accent: {{color_accent}};
+  --color-text: #1a1a1a;
+  --color-muted: #6b7280;
+  --color-bg: #ffffff;
+  --color-surface: #f9fafb;
+  --color-border: #e5e7eb;
+  --font-family: {{font_family}}, system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --container: 1120px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Header */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  gap: 1rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+.brand img { height: 36px; width: auto; }
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.nav a {
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.nav a.active { color: var(--color-primary); }
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.15s;
+}
+.btn:hover { text-decoration: none; opacity: 0.9; }
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-accent { background: var(--color-accent); color: #fff; }
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+/* Hero */
+.hero {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(135deg, var(--color-surface), var(--color-bg));
+}
+.hero h1 {
+  font-size: 2.75rem;
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+.hero .tagline {
+  font-size: 1.25rem;
+  color: var(--color-muted);
+  margin: 0 0 2rem;
+  max-width: 640px;
+}
+.hero .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* Sections */
+section.page {
+  padding: 3.5rem 0;
+}
+section.page h1 {
+  font-size: 2.25rem;
+  margin: 0 0 0.5rem;
+}
+section.page .lead {
+  font-size: 1.125rem;
+  color: var(--color-muted);
+  margin: 0 0 2rem;
+  max-width: 680px;
+}
+section.page .content {
+  max-width: 720px;
+  font-size: 1.05rem;
+}
+section.page .content p { margin: 0 0 1.25rem; }
+
+/* Cards / lists */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+.card p { margin: 0; color: var(--color-muted); }
+
+/* Footer */
+.site-footer {
+  margin-top: 4rem;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+.site-footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.socials { display: flex; gap: 1rem; }
+
+/* Forms */
+form.contact {
+  display: grid;
+  gap: 1rem;
+  max-width: 520px;
+  margin-top: 1.5rem;
+}
+form.contact label { font-weight: 600; font-size: 0.9rem; }
+form.contact input,
+form.contact textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font: inherit;
+}
+form.contact textarea { min-height: 140px; resize: vertical; }
+
+@media (max-width: 640px) {
+  .hero { padding: 3rem 0; }
+  .hero h1 { font-size: 2rem; }
+  .nav { gap: 1rem; }
+}
