@@ -22,7 +22,8 @@ export default function BuilderPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/builder-template.json', { cache: 'no-store' })
+    const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    fetch(`${base}/builder-template.json`, { cache: 'no-store' })
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json() as Promise<TemplateManifest>;

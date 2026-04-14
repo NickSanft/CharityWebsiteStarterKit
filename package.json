@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "builder:manifest": "node scripts/build-template-manifest.mjs",
+    "builder:sync": "node scripts/sync-builder-site.mjs",
+    "builder:install": "npm install --prefix builder-site",
+    "builder:dev": "npm run builder:manifest && npm run builder:sync && npm run dev --prefix builder-site",
+    "builder:build": "npm run builder:manifest && npm run builder:sync && npm run build --prefix builder-site",
     "predev": "npm run builder:manifest",
     "prebuild": "npm run builder:manifest",
     "dev": "next dev --turbopack",
