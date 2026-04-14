@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "builder:manifest": "node scripts/build-template-manifest.mjs",
+    "predev": "npm run builder:manifest",
+    "prebuild": "npm run builder:manifest",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
