@@ -138,8 +138,10 @@ export function renderPreview(
     .replace(/<link rel="stylesheet" href="styles\.css" \/>/, `<style>${css}</style>`)
     .replace(/src="assets\/logo\.svg"/g, `src="${logoSrc}"`)
     .replace(/href="assets\/favicon\.svg"/g, 'href="#"')
-    // Rewrite cross-page links so nav clicks don't navigate away inside the iframe.
-    .replace(/href="(index|about|events|volunteer|donate|contact)\.html"/g, 'href="#$1"');
+    // Cross-page links are neutered inside the iframe — its base URL is the
+    // parent's, so any non-absolute href would otherwise navigate the iframe
+    // away. javascript:void(0) is blocked by the sandbox and is a true no-op.
+    .replace(/href="(index|about|events|volunteer|donate|contact)\.html"/g, 'href="javascript:void(0)"');
 }
 
 function svgToDataUrl(svg: string): string {
