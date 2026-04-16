@@ -1,4 +1,4 @@
-import type { BuilderState, PageKey } from './schema';
+import { GOOGLE_FONTS, type BuilderState, type PageKey } from './schema';
 
 export interface TemplateFile {
   path: string;
@@ -25,7 +25,12 @@ export function buildRenderContext(state: BuilderState): RenderContext {
     page_events: state.enabled_pages.events,
     page_volunteer: state.enabled_pages.volunteer,
     page_donate: state.enabled_pages.donate,
+    page_blog: state.enabled_pages.blog,
     page_contact: state.enabled_pages.contact,
+    formspree: state.formspree_id.trim().length > 0,
+    home_hero: state.home_hero_data_url.length > 0,
+    about_image: state.about_image_data_url.length > 0,
+    custom_domain: state.custom_domain.trim().length > 0,
     social_twitter: state.social_twitter.trim().length > 0,
     social_facebook: state.social_facebook.trim().length > 0,
     social_instagram: state.social_instagram.trim().length > 0,
@@ -37,6 +42,8 @@ export function buildRenderContext(state: BuilderState): RenderContext {
     color_primary: state.color_primary,
     color_accent: state.color_accent,
     font_family: state.font_family,
+    favicon_letter: (state.charity_name.trim()[0] ?? 'H').toUpperCase(),
+    google_fonts_link: buildGoogleFontsLink(state.font_family),
     year: String(new Date().getFullYear()),
 
     home_heading: state.home_heading,
@@ -68,30 +75,50 @@ export function buildRenderContext(state: BuilderState): RenderContext {
     donate_body: state.donate_body,
     stripe_link: state.stripe_link,
 
+    blog_heading: state.blog_heading,
+    blog_lead: state.blog_lead,
+    blog1_title: state.blog1_title,
+    blog1_date: state.blog1_date,
+    blog1_body: state.blog1_body,
+    blog2_title: state.blog2_title,
+    blog2_date: state.blog2_date,
+    blog2_body: state.blog2_body,
+    blog3_title: state.blog3_title,
+    blog3_date: state.blog3_date,
+    blog3_body: state.blog3_body,
+
     contact_heading: state.contact_heading,
     contact_lead: state.contact_lead,
     contact_email: state.contact_email,
+    formspree_id: state.formspree_id,
 
     social_twitter: state.social_twitter,
     social_facebook: state.social_facebook,
     social_instagram: state.social_instagram,
+
+    custom_domain: state.custom_domain,
   };
 
   return { state, flags, tokens };
 }
 
 const IF_BLOCK = /<!--IF:([a-z0-9_]+)-->([\s\S]*?)<!--ENDIF-->/g;
+const IFNOT_BLOCK = /<!--IFNOT:([a-z0-9_]+)-->([\s\S]*?)<!--ENDIFNOT-->/g;
 const TOKEN = /\{\{\s*([a-z0-9_]+)\s*\}\}/g;
 
 /**
- * Apply {{tokens}} and <!--IF:flag-->...<!--ENDIF--> blocks to a template string.
+ * Apply {{tokens}}, <!--IF:flag-->...<!--ENDIF-->, and
+ * <!--IFNOT:flag-->...<!--ENDIFNOT--> blocks to a template string.
  * Missing tokens resolve to empty string. Unknown flags are treated as false.
  */
 export function applyTemplate(source: string, ctx: RenderContext): string {
   const withIfs = source.replace(IF_BLOCK, (_m, flag: string, body: string) =>
     ctx.flags[flag] ? body : '',
   );
-  return withIfs.replace(TOKEN, (_m, key: string) =>
+  const withIfNots = withIfs.replace(IFNOT_BLOCK, (_m, flag: string, body: string) =>
+    !ctx.flags[flag] ? body : '',
+  );
+  return withIfNots.replace(TOKEN, (_m, key: string) =>
     Object.prototype.hasOwnProperty.call(ctx.tokens, key) ? ctx.tokens[key] : '',
   );
 }
@@ -141,7 +168,7 @@ export function renderPreview(
     // Cross-page links are neutered inside the iframe — its base URL is the
     // parent's, so any non-absolute href would otherwise navigate the iframe
     // away. javascript:void(0) is blocked by the sandbox and is a true no-op.
-    .replace(/href="(index|about|events|volunteer|donate|contact)\.html"/g, 'href="javascript:void(0)"');
+    .replace(/href="(index|about|events|volunteer|donate|blog|contact)\.html"/g, 'href="javascript:void(0)"');
 }
 
 function svgToDataUrl(svg: string): string {
@@ -149,6 +176,13 @@ function svgToDataUrl(svg: string): string {
     return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svg)))}`;
   }
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function buildGoogleFontsLink(family: string): string {
+  const font = GOOGLE_FONTS.find((f) => f.value === family);
+  if (!font || !('google' in font) || !font.google) return '';
+  const encoded = family.replace(/\s+/g, '+');
+  return `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=${encoded}:wght@400;600;700&display=swap" rel="stylesheet">`;
 }
 
 function transparentPixel() {

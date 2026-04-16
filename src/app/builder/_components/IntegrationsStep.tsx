@@ -27,6 +27,24 @@ export function IntegrationsStep({
       </section>
 
       <section className="space-y-2">
+        <Label htmlFor="formspree_id">Formspree form ID (optional)</Label>
+        <Input
+          id="formspree_id"
+          placeholder="e.g. xwkgpqzl"
+          value={state.formspree_id}
+          onChange={(e) => update({ formspree_id: e.target.value })}
+        />
+        <p className="text-xs text-muted-foreground">
+          Create a free form at{' '}
+          <a href="https://formspree.io" target="_blank" rel="noopener" className="underline">
+            formspree.io
+          </a>
+          , paste the form ID here, and your Contact page will actually receive submissions.
+          Without it the form falls back to a <code className="rounded bg-muted px-1">mailto:</code> link.
+        </p>
+      </section>
+
+      <section className="space-y-2">
         <Label htmlFor="stripe_link">Stripe payment link</Label>
         <Input
           id="stripe_link"
@@ -69,6 +87,21 @@ export function IntegrationsStep({
             onChange={(e) => update({ social_instagram: e.target.value })}
           />
         </div>
+      </section>
+
+      <section className="space-y-2">
+        <h3 className="font-medium">Custom domain (optional)</h3>
+        <Label htmlFor="custom_domain" className="text-xs">Domain name</Label>
+        <Input
+          id="custom_domain"
+          placeholder="www.mycharity.org"
+          value={state.custom_domain}
+          onChange={(e) => update({ custom_domain: e.target.value })}
+        />
+        <p className="text-xs text-muted-foreground">
+          If you own a domain, entering it here adds a <code className="rounded bg-muted px-1">CNAME</code> file to the
+          zip and includes setup instructions in the README.
+        </p>
       </section>
     </div>
   );

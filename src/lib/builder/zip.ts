@@ -141,6 +141,21 @@ export async function buildAndDownloadZip(
     zip.file(faviconFinalPath, faviconParts.bytes);
   }
 
+  // Per-page images (hero, about, etc.)
+  if (state.home_hero_data_url) {
+    const parts = parseDataUrl(state.home_hero_data_url);
+    if (parts) zip.file(`assets/home-hero.${parts.extension}`, parts.bytes);
+  }
+  if (state.about_image_data_url) {
+    const parts = parseDataUrl(state.about_image_data_url);
+    if (parts) zip.file(`assets/about-image.${parts.extension}`, parts.bytes);
+  }
+
+  // Custom domain CNAME file.
+  if (state.custom_domain.trim()) {
+    zip.file('CNAME', state.custom_domain.trim() + '\n');
+  }
+
   const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
   saveAs(blob, `${slug(state.charity_name)}-site.zip`);
 }

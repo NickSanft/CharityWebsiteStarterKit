@@ -37,27 +37,35 @@ export function PagesStep({
         </div>
       </section>
 
+      {/* Home */}
       <section className="space-y-3">
         <h3 className="font-medium">Home</h3>
         <Field label="Heading" value={state.home_heading} onChange={(v) => update({ home_heading: v })} />
-        <Field
-          label="Subheading"
-          value={state.home_subheading}
-          onChange={(v) => update({ home_subheading: v })}
-          textarea
-        />
+        <Field label="Subheading" value={state.home_subheading} onChange={(v) => update({ home_subheading: v })} textarea />
         <Field label="Body" value={state.home_body} onChange={(v) => update({ home_body: v })} textarea rows={4} />
+        <ImageField
+          label="Hero image (optional)"
+          value={state.home_hero_data_url}
+          onChange={(v) => update({ home_hero_data_url: v })}
+        />
       </section>
 
+      {/* About */}
       {state.enabled_pages.about && (
         <section className="space-y-3">
           <h3 className="font-medium">About</h3>
           <Field label="Heading" value={state.about_heading} onChange={(v) => update({ about_heading: v })} />
           <Field label="Lead" value={state.about_lead} onChange={(v) => update({ about_lead: v })} textarea />
           <Field label="Body" value={state.about_body} onChange={(v) => update({ about_body: v })} textarea rows={4} />
+          <ImageField
+            label="About image (optional)"
+            value={state.about_image_data_url}
+            onChange={(v) => update({ about_image_data_url: v })}
+          />
         </section>
       )}
 
+      {/* Events */}
       {state.enabled_pages.events && (
         <section className="space-y-3">
           <h3 className="font-medium">Events</h3>
@@ -87,6 +95,7 @@ export function PagesStep({
         </section>
       )}
 
+      {/* Volunteer */}
       {state.enabled_pages.volunteer && (
         <section className="space-y-3">
           <h3 className="font-medium">Volunteer</h3>
@@ -96,6 +105,7 @@ export function PagesStep({
         </section>
       )}
 
+      {/* Donate */}
       {state.enabled_pages.donate && (
         <section className="space-y-3">
           <h3 className="font-medium">Donate</h3>
@@ -105,6 +115,37 @@ export function PagesStep({
         </section>
       )}
 
+      {/* Blog */}
+      {state.enabled_pages.blog && (
+        <section className="space-y-3">
+          <h3 className="font-medium">Blog</h3>
+          <Field label="Heading" value={state.blog_heading} onChange={(v) => update({ blog_heading: v })} />
+          <Field label="Lead" value={state.blog_lead} onChange={(v) => update({ blog_lead: v })} textarea />
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="rounded-md border p-3 space-y-2">
+              <div className="text-xs font-medium uppercase text-muted-foreground">Post {n}</div>
+              <Field
+                label="Title"
+                value={state[`blog${n}_title` as keyof BuilderState] as string}
+                onChange={(v) => update({ [`blog${n}_title`]: v } as Partial<BuilderState>)}
+              />
+              <Field
+                label="Date"
+                value={state[`blog${n}_date` as keyof BuilderState] as string}
+                onChange={(v) => update({ [`blog${n}_date`]: v } as Partial<BuilderState>)}
+              />
+              <Field
+                label="Body"
+                textarea
+                value={state[`blog${n}_body` as keyof BuilderState] as string}
+                onChange={(v) => update({ [`blog${n}_body`]: v } as Partial<BuilderState>)}
+              />
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Contact */}
       {state.enabled_pages.contact && (
         <section className="space-y-3">
           <h3 className="font-medium">Contact</h3>
@@ -140,6 +181,39 @@ function Field({
       ) : (
         <Input id={id} value={value} onChange={(e) => onChange(e.target.value)} />
       )}
+    </div>
+  );
+}
+
+function ImageField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onChange(String(reader.result ?? ''));
+    reader.readAsDataURL(file);
+  }
+  return (
+    <div className="space-y-1">
+      <Label className="text-xs">{label}</Label>
+      <Input type="file" accept="image/*" onChange={onFile} />
+      {value ? (
+        <div className="mt-1 flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={value} alt="Preview" className="h-16 w-auto rounded border bg-white object-cover" />
+          <button type="button" className="text-xs text-muted-foreground underline" onClick={() => onChange('')}>
+            Remove
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

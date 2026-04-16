@@ -39,10 +39,24 @@ export function DownloadStep({
             />{' '}
             {state.color_accent}
           </dd>
+          <dt className="text-muted-foreground">Font</dt>
+          <dd>{state.font_family}</dd>
           <dt className="text-muted-foreground">Contact</dt>
           <dd>{state.contact_email || <em className="text-muted-foreground">(empty)</em>}</dd>
+          {state.formspree_id && (
+            <>
+              <dt className="text-muted-foreground">Formspree</dt>
+              <dd>{state.formspree_id}</dd>
+            </>
+          )}
           <dt className="text-muted-foreground">Donate link</dt>
           <dd className="truncate">{state.stripe_link || <em className="text-muted-foreground">(empty)</em>}</dd>
+          {state.custom_domain && (
+            <>
+              <dt className="text-muted-foreground">Domain</dt>
+              <dd>{state.custom_domain}</dd>
+            </>
+          )}
         </dl>
       </section>
 

@@ -6,6 +6,7 @@
   <title>{{charity_name}}</title>
   <meta name="description" content="{{tagline}}" />
   <link rel="icon" href="assets/favicon.svg" />
+  {{google_fonts_link}}
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -21,6 +22,7 @@
         <!--IF:page_events--><a href="events.html">Events</a><!--ENDIF-->
         <!--IF:page_volunteer--><a href="volunteer.html">Volunteer</a><!--ENDIF-->
         <!--IF:page_donate--><a href="donate.html">Donate</a><!--ENDIF-->
+        <!--IF:page_blog--><a href="blog.html">Blog</a><!--ENDIF-->
         <!--IF:page_contact--><a href="contact.html">Contact</a><!--ENDIF-->
       </nav>
     </div>
@@ -37,6 +39,12 @@
         </div>
       </div>
     </section>
+
+    <!--IF:home_hero--><section class="page">
+      <div class="container">
+        <img src="assets/home-hero.jpg" alt="" class="hero-image" style="width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius);margin-bottom:2rem" />
+      </div>
+    </section><!--ENDIF-->
 
     <section class="page">
       <div class="container">

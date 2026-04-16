@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { BasicsStep } from './_components/BasicsStep';
 import { PagesStep } from './_components/PagesStep';
@@ -13,13 +13,33 @@ import type { TemplateManifest } from '@/lib/builder/render';
 const STEPS = ['Basics', 'Pages', 'Integrations', 'Download'] as const;
 type Step = (typeof STEPS)[number];
 
+const STORAGE_KEY = 'charity-builder-state';
+
+function loadSaved(): BuilderState {
+  if (typeof window === 'undefined') return DEFAULTS;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return DEFAULTS;
+    return { ...DEFAULTS, ...JSON.parse(raw) };
+  } catch {
+    return DEFAULTS;
+  }
+}
+
 export default function BuilderPage() {
   const [step, setStep] = useState<Step>('Basics');
   const [state, setState] = useState<BuilderState>(DEFAULTS);
   const [manifest, setManifest] = useState<TemplateManifest | null>(null);
   const [manifestError, setManifestError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState(false);
+  const [mobileView, setMobileView] = useState<'form' | 'preview'>('form');
 
+  // Restore from localStorage on mount (client only).
+  useEffect(() => {
+    setState(loadSaved());
+  }, []);
+
+  // Fetch the template manifest.
   useEffect(() => {
     let cancelled = false;
     const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -39,9 +59,15 @@ export default function BuilderPage() {
     };
   }, []);
 
-  function update(patch: Partial<BuilderState>) {
-    setState((prev) => ({ ...prev, ...patch }));
-  }
+  const update = useCallback((patch: Partial<BuilderState>) => {
+    setState((prev) => {
+      const next = { ...prev, ...patch };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch { /* quota exceeded, ignore */ }
+      return next;
+    });
+  }, []);
 
   async function onDownload() {
     if (!manifest) return;
@@ -61,28 +87,52 @@ export default function BuilderPage() {
 
   return (
     <div className="flex h-screen flex-col">
-      <header className="border-b px-6 py-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold">Charity Website Builder</h1>
-            <p className="text-xs text-muted-foreground">
-              Configure your site, preview it live, and download a zip for GitHub Pages.
-            </p>
+      <header className="border-b px-4 py-3 lg:px-6">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold">Charity Website Builder</h1>
+              <p className="hidden text-xs text-muted-foreground sm:block">
+                Configure your site, preview it live, and download a zip for GitHub Pages.
+              </p>
+            </div>
+            {/* Mobile form/preview toggle */}
+            <div className="flex gap-1 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileView('form')}
+                className={`rounded px-3 py-1.5 text-sm ${
+                  mobileView === 'form' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'
+                }`}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileView('preview')}
+                className={`rounded px-3 py-1.5 text-sm ${
+                  mobileView === 'preview' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'
+                }`}
+              >
+                Preview
+              </button>
+            </div>
           </div>
-          <nav className="flex items-center gap-1 text-sm">
+          <nav className="flex flex-wrap items-center gap-1 text-sm">
             {STEPS.map((s, i) => (
               <button
                 key={s}
                 type="button"
-                onClick={() => setStep(s)}
-                className={`rounded px-3 py-1.5 ${
+                onClick={() => { setStep(s); setMobileView('form'); }}
+                className={`rounded px-2 py-1 sm:px-3 sm:py-1.5 ${
                   s === step ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'
                 }`}
               >
-                <span className="mr-2 inline-block h-5 w-5 rounded-full bg-background/30 text-center text-xs leading-5">
+                <span className="mr-1 inline-block h-5 w-5 rounded-full bg-background/30 text-center text-xs leading-5 sm:mr-2">
                   {i + 1}
                 </span>
-                {s}
+                <span className="hidden sm:inline">{s}</span>
+                <span className="sm:hidden">{s.slice(0, 3)}</span>
               </button>
             ))}
           </nav>
@@ -90,7 +140,7 @@ export default function BuilderPage() {
       </header>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(360px,2fr)_3fr]">
-        <section className="min-h-0 overflow-y-auto border-r p-6">
+        <section className={`min-h-0 overflow-y-auto border-r p-4 lg:block lg:p-6 ${mobileView === 'preview' ? 'hidden' : ''}`}>
           {manifestError && (
             <div className="mb-4 rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
               Failed to load template manifest: {manifestError}. Run{' '}
@@ -122,7 +172,7 @@ export default function BuilderPage() {
           </div>
         </section>
 
-        <section className="min-h-0 bg-muted/30">
+        <section className={`min-h-0 bg-muted/30 lg:block ${mobileView === 'form' ? 'hidden' : ''}`}>
           <Preview state={state} manifest={manifest} />
         </section>
       </div>

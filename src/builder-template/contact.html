@@ -6,6 +6,7 @@
   <title>Contact — {{charity_name}}</title>
   <meta name="description" content="Contact {{charity_name}}" />
   <link rel="icon" href="assets/favicon.svg" />
+  {{google_fonts_link}}
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -34,7 +35,8 @@
         <div class="content">
           <p>Reach us by email at <a href="mailto:{{contact_email}}">{{contact_email}}</a>.</p>
         </div>
-        <form class="contact" action="mailto:{{contact_email}}" method="post" enctype="text/plain">
+        <!--IF:formspree--><form class="contact" action="https://formspree.io/f/{{formspree_id}}" method="POST"><!--ENDIF-->
+        <!--IFNOT:formspree--><form class="contact" action="mailto:{{contact_email}}" method="post" enctype="text/plain"><!--ENDIFNOT-->
           <div>
             <label for="name">Your name</label>
             <input id="name" name="name" type="text" required />
